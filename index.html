@@ -2976,9 +2976,224 @@
     .footer-made i {
       color: var(--primary);
     }
+  
+    /* ==================== LOGIN STYLES ==================== */
+    .login-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .login-container.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .login-box {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 48px;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 800;
+      color: white;
+      margin: 0 auto 16px;
+    }
+
+    .login-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 32px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .form-input {
+      padding: 14px 16px;
+      border: 2px solid var(--light-gray);
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: var(--off-white);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+    }
+
+    .form-input.error {
+      border-color: var(--error);
+      background: #fff5f5;
+    }
+
+    .error-message {
+      font-size: 13px;
+      color: var(--error);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: -8px;
+    }
+
+    .login-btn {
+      padding: 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .login-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(228, 9, 19, 0.3);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .login-btn:disabled {
+      background: var(--gray);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--light-gray);
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .main-content {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease 0.3s, visibility 0.5s ease 0.3s;
+    }
+
+    .main-content.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
   </style>
 </head>
 <body>
+  <!-- LOGIN SCREEN -->
+  <div class="login-container" id="loginContainer">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-logo-icon">F</div>
+        <h1 class="login-title">Secure Access</h1>
+      </div>
+      <p class="login-subtitle">Masukkan password untuk mengakses proposal</p>
+      
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-input" 
+            placeholder="Masukkan password"
+            autocomplete="off"
+            required
+          >
+        </div>
+        <div id="errorMessage" style="display: none;"></div>
+        <button type="submit" class="login-btn" id="loginBtn">
+          <i data-lucide="lock" style="width:20px;height:20px"></i>
+          Akses Proposal
+        </button>
+      </form>
+      
+      <div class="login-footer">
+        <i data-lucide="shield-check" style="width:16px;height:16px;display:inline;vertical-align:middle"></i>
+        Dokumen ini bersifat CONFIDENTIAL
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content" id="mainContent">
+
   <!-- HEADER -->
   <header class="header" id="header">
     <div class="container">
@@ -4562,6 +4777,83 @@
   </footer>
 
   <script>
+
+    // ==================== AUTHENTICATION ====================
+    // Password: Lays@2026!Flex#Secure
+    const CORRECT_PASSWORD_HASH = 'd1b1225ed2f49953e32f994453098f3facf7ee599bf5c299f5a4e0ac8db67a6c';
+    
+    // Simple hash function for password verification
+    async function hashPassword(password) {
+      const msgBuffer = new TextEncoder().encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    }
+
+    // Check if user is already authenticated
+    function isAuthenticated() {
+      const authToken = sessionStorage.getItem('authToken');
+      return authToken === CORRECT_PASSWORD_HASH;
+    }
+
+    // Handle login form submission
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const passwordInput = document.getElementById('password');
+      const loginBtn = document.getElementById('loginBtn');
+      const errorMessage = document.getElementById('errorMessage');
+      const password = passwordInput.value;
+
+      // Disable button during processing
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<i data-lucide="loader-2" style="width:20px;height:20px;animation:spin 1s linear infinite"></i> Verifying...';
+      lucide.createIcons();
+
+      // Simulate processing delay for security
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      const hashedPassword = await hashPassword(password);
+
+      if (hashedPassword === CORRECT_PASSWORD_HASH) {
+        // Successful login
+        sessionStorage.setItem('authToken', hashedPassword);
+        
+        // Hide login, show main content
+        document.getElementById('loginContainer').classList.add('hidden');
+        setTimeout(() => {
+          document.getElementById('mainContent').classList.add('visible');
+        }, 500);
+      } else {
+        // Failed login
+        passwordInput.classList.add('error');
+        errorMessage.innerHTML = '<i data-lucide="alert-circle" style="width:16px;height:16px"></i> Password salah. Silakan coba lagi.';
+        errorMessage.className = 'error-message';
+        errorMessage.style.display = 'flex';
+        
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i data-lucide="lock" style="width:20px;height:20px"></i> Akses Proposal';
+        
+        lucide.createIcons();
+
+        // Clear error after input change
+        passwordInput.addEventListener('input', function() {
+          passwordInput.classList.remove('error');
+          errorMessage.style.display = 'none';
+        }, { once: true });
+      }
+    });
+
+    // Check authentication on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      if (isAuthenticated()) {
+        document.getElementById('loginContainer').classList.add('hidden');
+        document.getElementById('mainContent').classList.add('visible');
+      }
+    });
+
+    // ==================== MAIN APP SCRIPTS ====================
     // Initialize Lucide icons
     lucide.createIcons();
 
@@ -4739,5 +5031,6 @@
       lucide.createIcons();
     });
   </script>
+  </div>
 </body>
 </html>
